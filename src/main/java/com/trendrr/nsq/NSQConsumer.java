@@ -3,6 +3,7 @@ package com.trendrr.nsq;
  * 
  */
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -15,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * @created Jan 14, 2013
  * 
  */
-public class NSQConsumer extends AbstractNSQClient {
+public class NSQConsumer extends AbstractNSQClient implements Serializable {
 
 	protected static Logger log = LoggerFactory.getLogger(NSQConsumer.class);
 	

@@ -3,6 +3,8 @@
  */
 package com.trendrr.nsq;
 
+import java.io.Serializable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +14,12 @@ import org.slf4j.LoggerFactory;
  * @created Jan 22, 2013
  * 
  */
-public class ConnectionAddress {
+public class ConnectionAddress implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5368051009026053825L;
 
 	protected static Logger log = LoggerFactory.getLogger(ConnectionAddress.class);
 	

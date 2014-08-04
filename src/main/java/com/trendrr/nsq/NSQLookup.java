@@ -4,6 +4,7 @@ package com.trendrr.nsq;
  */
 
 
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -16,7 +17,7 @@ import java.util.List;
  * @created Jan 14, 2013
  * 
  */
-public interface NSQLookup {
+public interface NSQLookup extends Serializable {
 	/**
 	 * add an address to a nsq lookup server.
 	 * @param addr
