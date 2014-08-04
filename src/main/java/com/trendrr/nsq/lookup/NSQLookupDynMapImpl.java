@@ -10,15 +10,17 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.trendrr.nsq.ConnectionAddress;
 import com.trendrr.nsq.NSQLookup;
-import com.trendrr.oss.DynMap;
 
 
 /**
@@ -47,15 +49,26 @@ public class NSQLookupDynMapImpl implements NSQLookup {
 	public List<ConnectionAddress> lookup(String topic) {
 		HashMap<String, ConnectionAddress> addresses = new HashMap<String, ConnectionAddress>();
 		
+		ObjectMapper mapper = new ObjectMapper();
+		
 		for (String addr : this.addresses) {
-			DynMap mp = DynMap.instance(this.getHTML(addr + "/lookup?topic=" + topic), new DynMap());
-			for (DynMap node : mp.getListOrEmpty(DynMap.class, "data.producers")) {		
-				String host = node.getString("broadcast_address", node.getString("address"));
-				String key =  host + ":" + node.getInteger("tcp_port");
-				ConnectionAddress address = new ConnectionAddress();
-				address.setHost(host);
-				address.setPort(node.getInteger("tcp_port"));
-				addresses.put(key, address);
+			
+			try {
+				JsonNode rootNode = mapper.readTree(this.getHTML(addr + "/lookup?topic=" + topic));
+				JsonNode producers = rootNode.path("data").path("producers");
+				Iterator<JsonNode> prodItr = producers.getElements();
+				while (prodItr.hasNext()) {
+					JsonNode producer = prodItr.next();
+					String host = producer.path("broadcast_address").getTextValue();
+					int tcpPort = producer.path("tcp_port").getIntValue();
+					String key =  host + ":" + tcpPort;
+					ConnectionAddress address = new ConnectionAddress();
+					address.setHost(host);
+					address.setPort(tcpPort);
+					addresses.put(key, address);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		return new ArrayList<ConnectionAddress>(addresses.values());
