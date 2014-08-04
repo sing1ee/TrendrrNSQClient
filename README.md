@@ -72,17 +72,11 @@ for (int i=0; i < iterations; i++) {
 }
 ```
 
+## NOTE
 
-## Dependancies
+change from oss to org.codehaus.jackson
 
-* [netty][netty]
-* [slf4j][slf4j]
-* [trendrr-oss][trendrr-oss]
+## build
 
-Note: the trendrr-oss dependancy can easily be swapped out by implementing the com.trendrr.nsq.NSQLookup interface using a different json parser
+`mvn package`
 
-
-[nsq]: https://github.com/bitly/nsq
-[netty]: http://netty.io/
-[slf4j]: http://www.slf4j.org/
-[trendrr-oss]: https://github.com/trendrr/java-oss-lib
